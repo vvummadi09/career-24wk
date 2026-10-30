@@ -37,3 +37,16 @@ Source: oauth.com — Accessing Data, Authorization Code Grant, Example Flow
 - PKCE → a stolen code is useless without the code_verifier, which never left MyApp
 
 **Key terms:** code = temporary ticket · access token = API credential · refresh token = new access token without re-asking the user
+
+## Oct 29 — PKCE + refresh tokens
+Source: oauth.com — Protecting Apps with PKCE, Refreshing Access Tokens
+
+**PKCE flow:**
+1. Client creates a random code_verifier (keeps it secret)
+2. Client hashes it (S256 = SHA-256) → code_challenge, sends challenge in the authorization request
+3. At token exchange, client sends the code_verifier
+4. Server hashes the verifier itself and checks it matches the stored challenge (hashing is one-way — can't reverse the challenge)
+
+**Interview answers:**
+- Mobile/SPA apps are public clients: they can't keep a client secret (code lives on the user's device). PKCE gives a one-time secret per login. Now recommended for ALL clients, even with a client secret — stops authorization code injection.
+- Access tokens short-lived → limits damage if leaked. Refresh tokens long-lived for UX (no re-login), but safer: only sent to the auth server, can be revoked and rotated. Tradeoff: security vs. user experience.
