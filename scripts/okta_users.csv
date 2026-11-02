@@ -1,0 +1,8 @@
+login,firstName,lastName,middleName,honorificPrefix,honorificSuffix,email,title,displayName,nickName,profileUrl,secondEmail,mobilePhone,primaryPhone,streetAddress,city,state,zipCode,countryCode,postalAddress,preferredLanguage,locale,timezone,userType,employeeNumber,costCenter,organization,division,department,managerId,manager
+ava.patel@example.com,Ava,Patel,,,,ava.patel@example.com,Software Engineer,,,,,,,,,,,,,,,,,,,,,Engineering,,
+liam.chen@example.com,Liam,Chen,,,,liam.chen@example.com,Engineering Manager,,,,,,,,,,,,,,,,,,,,,Engineering,,
+sofia.garcia@example.com,Sofia,Garcia,,,,sofia.garcia@example.com,Financial Analyst,,,,,,,,,,,,,,,,,,,,,Finance,,
+noah.kim@example.com,Noah,Kim,,,,noah.kim@example.com,Accounts Payable Clerk,,,,,,,,,,,,,,,,,,,,,Finance,,
+mia.johnson@example.com,Mia,Johnson,,,,mia.johnson@example.com,HR Generalist,,,,,,,,,,,,,,,,,,,,,Human Resources,,
+ethan.brown@example.com,Ethan,Brown,,,,ethan.brown@example.com,Sales Representative,,,,,,,,,,,,,,,,,,,,,Sales,,
+zara.ali@example.com,Zara,Ali,,,,zara.ali@example.com,IT Administrator,,,,,,,,,,,,,,,,,,,,,IT,,
