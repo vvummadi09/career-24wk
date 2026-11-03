@@ -96,3 +96,7 @@ Source: oauth.com — Protecting Apps with PKCE, Refreshing Access Tokens
 - Scopes + admin roles control what the app can access
 - The JWT we send (client assertion) and the access token we receive are different
 - Read-only still: Even with read-only access, an attacker can see sensitive user details and use that information for phishing or other attacks
+
+½. Hashing is right, but give the full loop: the client sends SHA256(verifier) as the challenge up front, then the raw verifier at the token step. The server hashes the verifier itself and compares.
+✅ The code travels through the browser (front channel); the token comes back server-to-server (back channel).
+½. Every refresh issues a new refresh token and kills the old one. If an old one is ever used again, two parties hold it, which means it was stolen. The server then revokes the whole token family. That’s token replay detection.
