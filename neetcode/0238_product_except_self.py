@@ -1,4 +1,15 @@
 def product_except_self(nums):
+    """
+    Returns a list where each position has the product of all
+    numbers except the number at that position.
+
+    First, calculate the product of numbers to the left.
+    Then, calculate the product of numbers to the right.
+    Finally, multiply both to get the answer.
+
+    Time: O(n) - we go through the list 3 times.
+    Space: O(n) - we use left, right, and ans lists.
+    """
     n = len(nums)
     left = [1] * n
     right = [1] * n
