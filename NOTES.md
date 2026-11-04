@@ -100,3 +100,29 @@ Source: oauth.com — Protecting Apps with PKCE, Refreshing Access Tokens
 ½. Hashing is right, but give the full loop: the client sends SHA256(verifier) as the challenge up front, then the raw verifier at the token step. The server hashes the verifier itself and compares.
 ✅ The code travels through the browser (front channel); the token comes back server-to-server (back channel).
 ½. Every refresh issues a new refresh token and kills the old one. If an old one is ever used again, two parties hold it, which means it was stolen. The server then revokes the whole token family. That’s token replay detection.
+
+## Tue Nov 3 — Access Tokens
+
+### 1. Reference token vs JWT
+- Reference token (opaque): just a random string. The API can't read it, so it checks with the authorization server or a token database to validate it and get permissions.
+- (coach) That check is called **token introspection** (RFC 7662).
+- JWT: contains user details, scopes and expiration time. The API verifies its signature with a trusted key and checks the claims without calling the authorization server every time.
+- (coach) Tradeoff: JWT = fast local validation, slow revocation. Reference token = extra network call, instant revocation.
+
+### 2. Why short-lived access tokens + refresh tokens?
+- Access tokens are short-lived to reduce the risk if someone steals one.
+- When an access token expires, the app uses the refresh token to get a new one without making the user log in again.
+- Refresh tokens are usually longer-lived and must be stored securely.
+- (coach) Refresh token **rotation**: every refresh issues a new refresh token; reuse of an old one = theft detected → whole token family revoked.
+
+### 3. Why is a JWT hard to revoke early?
+- The API validates a JWT locally, without checking with the authorization server.
+- Even if the user's access is revoked, the JWT may keep working until it expires.
+- Fix: short-lived JWTs, a revoked-token list, or checking token status with the authorization server when needed.
+- (coach) A revoked-token list (deny list) is keyed on the JWT's **`jti`** claim (unique token ID).
+
+4. JWT Structure (jwt.io)
+
+Part 1: Header — holds the token type (JWT) and signing algorithm (HS256 or RS256).
+Part 2: Payload — holds claims like user ID, scopes, and expiration time.
+Part 3: Signature — proves the token was signed with the expected key and hasn't been tampered with, when properly verified.
