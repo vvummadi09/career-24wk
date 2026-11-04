@@ -126,3 +126,32 @@ Source: oauth.com — Protecting Apps with PKCE, Refreshing Access Tokens
 Part 1: Header — holds the token type (JWT) and signing algorithm (HS256 or RS256).
 Part 2: Payload — holds claims like user ID, scopes, and expiration time.
 Part 3: Signature — proves the token was signed with the expected key and hasn't been tampered with, when properly verified.
+
+## Wed Nov 4 — Introspection + rotation
+
+### 1. Introspection request
+- The resource server sends the access token to the authorization server's `/introspect` endpoint to check if it's still valid.
+- The request includes the token and authentication for the resource server.
+- `active: false` means the token is expired, revoked, invalid, or not allowed to be checked by that resource server.
+
+### 2. Refresh token rotation
+- When a refresh token is rotated, the authorization server issues a new one and invalidates the old one.
+- If someone tries to use the old refresh token again, the server detects possible token theft.
+- It can revoke the related tokens to prevent further access.
+- A short grace period may be allowed for network retries.
+
+### 3. Introspection vs local JWT validation
+- Use introspection when I need the latest token status, especially if tokens must be revoked quickly.
+- Local JWT validation is faster because the API verifies the signature and claims without calling the authorization server every time.
+- Introspection needs an extra server call but gives more up-to-date revocation status, unless the result is cached.
+
+### 4. Fields in an `active: true` response (RFC 7662 §2.2)
+- `scope` — tells what permissions the token has.
+- `client_id` — identifies the application the token was issued to.
+- `sub` — identifies the user associated with the token.
+- `exp` — tells when the token expires.
+
+### 5. Interview answer: 10k req/s, revoke within 60s — JWT or introspection?
+- I would choose introspection with a short cache of less than 60 seconds because revocation needs to happen quickly.
+- Since there are 10k requests per second, caching helps reduce calls to the authorization server.
+- Local JWT validation is faster, but it cannot detect revocation immediately without an additional revocation check.
