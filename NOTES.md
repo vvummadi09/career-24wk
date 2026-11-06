@@ -155,3 +155,33 @@ Part 3: Signature — proves the token was signed with the expected key and hasn
 - I would choose introspection with a short cache of less than 60 seconds because revocation needs to happen quickly.
 - Since there are 10k requests per second, caching helps reduce calls to the authorization server.
 - Local JWT validation is faster, but it cannot detect revocation immediately without an additional revocation check.
+
+## Thu Nov 5 — Client Secret & JWT Client Authentication
+
+### 1. client_secret_basic vs client_secret_post
+- `client_secret_basic` — client id and client secret are sent in Authorization header with base64 encoding.
+- `client_secret_post` — client id and client secret are sent in request body as form fields.
+- In both methods client secret travels over network, so it should be sent securely using HTTPS.
+
+### 2. JWT claims
+- `iss` — issuer of JWT, for client authentication it is client id.
+- `sub` — subject of JWT, also client id.
+- `aud` — authorization server where JWT is sent.
+- `exp` — expiration time of JWT.
+- `jti` — unique token identifier used to detect replay attacks.
+
+### 3. Why private_key_jwt is safer for NHIs
+- NHI means non human identity like service apps which communicate without user login.
+- If client secret is leaked attacker can claim they are genuine service app and request access tokens.
+- If private key is leaked attacker can sign JWT with their own payload and authenticate as service app if claims are valid.
+- Second case is usually easier to contain because private key doesn't travel over network but client secret travels over network.
+- Client secret can be rotated and even public and private keys can be rotated by generating new key pair.
+- In private_key_jwt only signed JWT is sent to Okta and public key is used to verify it.
+- We can register new public key and remove old one if private key is leaked.
+- (coach) Client secret is shared — Okta stores it too. Private key exists only on the app side; it can even live in AWS KMS where it can't be exported.
+- (coach) Rotation = upload new public key with a new `kid`, switch the app to the new private key, delete the old public key.
+
+### 4. jti and exp
+- `jti` is unique token identifier and it can stop replay attacks if server checks whether it was already used.
+- `exp` is expiration time, keeping it short will also limit replay attacks as token gets expired shortly and impact is low.
+- Together they help prevent replay attacks where attacker tries to reuse the same JWT.
