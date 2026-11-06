@@ -1,6 +1,6 @@
 """
 347. Top K Frequent Elements — re-solve with bucket sort
-Time: O(?)  Space: O(?)
+Time: O(n)  Space: O(n)
 Hints: (none / yes)
 """
 from collections import Counter
