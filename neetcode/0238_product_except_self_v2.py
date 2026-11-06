@@ -1,9 +1,11 @@
 """
 238. Product of Array Except Self — re-solve from blank (v2)
 
-Problem: (your words)
-Approach: (your words)
-Time: O(?)  Space: O(?)
+Problem: Given a list of numbers, return a new list where each position contains the product of all the other numbers except the number at that position.
+Approach: First we will calculate the product of numbers to the left.
+    Then we will calculate the product of numbers to the right.
+    after that multiply both to get the answer.
+Time: O(n)  Space: O(n)
 Hints: none
 """
 
